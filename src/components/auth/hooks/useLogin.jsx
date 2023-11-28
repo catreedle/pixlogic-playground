@@ -1,6 +1,8 @@
 "use client"
 import { useState } from 'react'
 import { API_URL } from "@/config/apiUrl";
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 export const useLogin = () => {
 
@@ -8,6 +10,7 @@ export const useLogin = () => {
         email: "",
         password: ""
     })
+    const router = useRouter()
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -30,7 +33,7 @@ export const useLogin = () => {
             body: JSON.stringify({ email, password }),
         });
         const data = await res.json();
-        // Cookies.set("token", data.token);
+        Cookies.set("token", data.token);
 
         if (!data) {
             // setLoading(false);
@@ -42,7 +45,7 @@ export const useLogin = () => {
 
         // setLoading(false);
         // toast.success("Login succesfully, redirecting...");
-        // setTimeout(() => router.push("/dashboard"), 2000);
+        setTimeout(() => router.push("/dashboard"), 2000);
     }
     return { handleChange, handleSubmitLogin }
 
