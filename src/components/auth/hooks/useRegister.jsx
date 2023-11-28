@@ -1,6 +1,7 @@
 "use client"
 import { useState } from 'react'
 import { API_URL } from "@/config/apiUrl";
+import { toast } from 'react-hot-toast'
 
 export const useRegister = () => {
 
@@ -8,6 +9,7 @@ export const useRegister = () => {
         email: "",
         password: ""
     })
+    const [loading, setLoading] = useState(false)
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -19,8 +21,7 @@ export const useRegister = () => {
     }
 
     async function handleSubmitRegister() {
-        // Problem ada di backend
-        // setLoading(true);
+        setLoading(true);
         const { name, email, password } = registerData;
         const res = await fetch(`${API_URL}/register`, {
             method: "POST",
@@ -33,17 +34,16 @@ export const useRegister = () => {
         // Cookies.set("token", data.token);
 
         if (!data) {
-            // setLoading(false);
-            toast.error("Error login!");
+            setLoading(false);
+            toast.error("Error registering!");
             return;
         }
 
         console.log(data)
 
-        // setLoading(false);
-        // toast.success("Login succesfully, redirecting...");
-        // setTimeout(() => router.push("/dashboard"), 2000);
+        setLoading(false);
+        toast.success("User registered, please login...");
     }
-    return { handleChange, handleSubmitRegister }
+    return { loading, handleChange, handleSubmitRegister }
 
 }

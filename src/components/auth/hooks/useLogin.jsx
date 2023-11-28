@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { API_URL } from "@/config/apiUrl";
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 export const useLogin = () => {
 
@@ -10,6 +11,7 @@ export const useLogin = () => {
         email: "",
         password: ""
     })
+    const [loading, setLoading] = useState(false)
     const router = useRouter()
 
     function handleChange(e) {
@@ -22,8 +24,7 @@ export const useLogin = () => {
     }
 
     async function handleSubmitLogin() {
-        // Problem ada di backend
-        // setLoading(true);
+        setLoading(true);
         const { email, password } = loginData;
         const res = await fetch(`${API_URL}/login`, {
             method: "POST",
@@ -35,18 +36,18 @@ export const useLogin = () => {
         const data = await res.json();
         Cookies.set("token", data.token);
 
-        if (!data) {
-            // setLoading(false);
-            toast.error("Error login!");
+        if (data.token == undefined) {
+            setLoading(false);
+            toast.error(data.message);
             return;
         }
 
         console.log(data)
 
-        // setLoading(false);
-        // toast.success("Login succesfully, redirecting...");
+        setLoading(false);
+        toast.success(data.message);
         setTimeout(() => router.push("/dashboard"), 2000);
     }
-    return { handleChange, handleSubmitLogin }
+    return { loading, handleChange, handleSubmitLogin }
 
 }

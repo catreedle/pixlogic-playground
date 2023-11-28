@@ -2,9 +2,10 @@
 
 import { Button, Input } from "@nextui-org/react";
 import { useLogin } from '../hooks/useLogin';
+import Link from "next/link";
 
 export const Login = () => {
-  const { handleChange, handleSubmitLogin } = useLogin()
+  const { loading, handleChange, handleSubmitLogin } = useLogin()
   return (
     <main className=" space-y-5">
       <div className=" space-y-5">
@@ -26,7 +27,11 @@ export const Login = () => {
         />
       </div>
 
-      <Button className=' w-[320px] bg-orange-400 text-zinc-50' onClick={handleSubmitLogin}>Login</Button>
+      <Button isDisabled={loading} className=' w-[320px] bg-orange-400 text-zinc-50' onClick={handleSubmitLogin}>Login</Button>
+      <div className="flex gap-1 text-zinc-50">
+        <div>Don't have an account ?</div>
+        <Link href="/register">Register</Link>
+      </div>
     </main>
   )
 }
